@@ -1,0 +1,59 @@
+---
+layout: post
+title:  "LeetCode-340 滑动窗口"
+date:   2023-07-25 11:35:00 +0800
+categories: LeetCode
+tags: LeetCode C++
+author: FangLin
+---
+
+* content
+{:toc}
+
+## 题目描述
+  参考链接：https://blog.csdn.net/qq_29051413/article/details/108814174
+
+## My Solution
+  ```
+  int main()
+  {
+    std::string s{ "ecebabb" };
+    int k = 2;
+    std::map<char, std::set<int>> contain;
+    std::string result;
+    int begin = 0;
+    int end = 1;
+    while (begin < s.size() && end <= s.size())
+    {
+      if (contain.find(s.at(end - 1)) == contain.end() && contain.size() == k)
+      {
+        contain.at(s.at(begin)).erase(begin);
+        if (contain.at(s.at(begin)).size() == 0)
+        {
+          contain.erase(s.at(begin));
+        }
+        ++begin;
+      }
+      else
+      {
+        if (contain.find(s.at(end - 1)) == contain.end())
+        {
+          contain.emplace(s.at(end - 1), std::set<int>{end - 1});
+        }
+        else
+        {
+          contain[s.at(end - 1)].insert(end - 1);
+        }
+        if (contain.size() == k && end - begin > result.size())
+        {
+          result = s.substr(begin, end - begin);
+        }
+        ++end;
+      }
+    }
+    return 0;
+  }
+  ```
+
+## 主要思想是使用状态记录的滑动窗口执行元操作
+  可以使用计算机进行元操作的情况，无需寻找宏观规律。计算机就是擅长解决重复性的简单任务。
